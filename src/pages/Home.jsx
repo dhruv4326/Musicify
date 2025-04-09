@@ -22,12 +22,13 @@ const Home = ({ onPlaySong, onFavSong, songs, favorites, currentSong, isPlaying 
             <SongCard
               key={index}
               song={song}
-              onPlay={() => {
-                onPlaySong(song);
+              onPlay={(song, toggle) => {
+                onPlaySong(song, toggle); 
                 const recent = JSON.parse(sessionStorage.getItem("recent")) || [];
                 const updated = [song, ...recent.filter((s) => s.title !== song.title)].slice(0, 10);
                 sessionStorage.setItem("recent", JSON.stringify(updated));
               }}
+              
               onFav={() => onFavSong(song)}
               isFav={isFav}
               isPlaying={isThisSongPlaying}

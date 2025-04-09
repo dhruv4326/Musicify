@@ -5,6 +5,7 @@ import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import Home from "./pages/Home";
 import Favourites from "./pages/Favourites";
+import RecentlyPlayed from "./pages/RecentlyPlayed";
 import songs from "./data/songs";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [favorites, setFavorites] = useState([]);
+  const [recentSongs, setRecentSongs] = useState([]);
   const [showSidebar, setShowSidebar] = useState(false);
   const [bgStyle, setBgStyle] = useState({
     backgroundImage: "linear-gradient(to bottom right, #0f0f0f, #1e1e1e)",
@@ -27,11 +29,18 @@ function App() {
   useEffect(() => {
     const storedFavs = JSON.parse(localStorage.getItem("favourites")) || [];
     setFavorites(storedFavs);
+
+    const recent = JSON.parse(sessionStorage.getItem("recent")) || [];
+    setRecentSongs(recent);
   }, []);
 
   useEffect(() => {
     localStorage.setItem("favourites", JSON.stringify(favorites));
   }, [favorites]);
+
+  useEffect(() => {
+    sessionStorage.setItem("recent", JSON.stringify(recentSongs));
+  }, [recentSongs]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -52,39 +61,47 @@ function App() {
     }
   }, [currentSong, isPlaying]);
 
-  const handlePlaySong = (song) => {
+  const handlePlaySong = (song, shouldToggle = false) => {
     const index = songs.findIndex((s) => s.title === song.title);
-    if (currentSong?.title === song.title) {
-      setIsPlaying((prev) => !prev); // toggle play/pause
-    } else {
-      setCurrentIndex(index);
-      setCurrentSong(song);
-      setIsPlaying(true);
-
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.src = song.thumbnail;
-
-      img.onload = () => {
-        try {
-          const colorThief = new ColorThief();
-          const [r, g, b] = colorThief.getColor(img);
-
-          const lighten = (x) => Math.min(Math.floor(x * 1.3), 255);
-          const base = `rgb(${r}, ${g}, ${b})`;
-          const lighter = `rgb(${lighten(r)}, ${lighten(g)}, ${lighten(b)})`;
-
-          setBgStyle({
-            backgroundImage: `linear-gradient(to bottom right, ${base}, ${lighter})`,
-          });
-        } catch (err) {
-          setBgStyle({
-            backgroundImage: "linear-gradient(to bottom right, #0f0f0f, #1e1e1e)",
-          });
-        }
-      };
+  
+    // Toggle pause if the same song is playing
+    if (shouldToggle && currentSong?.title === song.title) {
+      setIsPlaying((prev) => !prev);
+      return;
     }
+  
+    setCurrentIndex(index);
+    setCurrentSong(song);
+    setIsPlaying(true);
+  
+    // Update recently played
+    const updated = [song, ...recentSongs.filter((s) => s.title !== song.title)].slice(0, 10);
+    setRecentSongs(updated);
+  
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.src = song.thumbnail;
+  
+    img.onload = () => {
+      try {
+        const colorThief = new ColorThief();
+        const [r, g, b] = colorThief.getColor(img);
+  
+        const lighten = (x) => Math.min(Math.floor(x * 1.3), 255);
+        const base = `rgb(${r}, ${g}, ${b})`;
+        const lighter = `rgb(${lighten(r)}, ${lighten(g)}, ${lighten(b)})`;
+  
+        setBgStyle({
+          backgroundImage: `linear-gradient(to bottom right, ${base}, ${lighter})`,
+        });
+      } catch {
+        setBgStyle({
+          backgroundImage: "linear-gradient(to bottom right, #0f0f0f, #1e1e1e)",
+        });
+      }
+    };
   };
+  
 
   const handlePause = () => setIsPlaying(false);
   const handlePlay = () => setIsPlaying(true);
@@ -184,6 +201,17 @@ function App() {
                 isPlaying={isPlaying}
               />
             )}
+           {currentPage === "RecentlyPlayed" && (
+  <RecentlyPlayed
+    onPlaySong={handlePlaySong}
+    onFavSong={handleFavSong}
+    favorites={favorites}
+    currentSong={currentSong}
+    isPlaying={isPlaying}
+  />
+)}
+
+    
           </main>
         </div>
 

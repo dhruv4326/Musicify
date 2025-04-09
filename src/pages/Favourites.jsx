@@ -33,7 +33,7 @@ const Favourites = ({ onPlaySong, onFavSong, favorites, currentSong, isPlaying }
             <SongCard
               key={index}
               song={song}
-              onPlay={() => onPlaySong(song)}
+              onPlay={(s, toggle) => onPlaySong(s, toggle)} 
               onFav={() => onFavSong(song)}
               isFav={true}
               isPlaying={isThisSongPlaying}

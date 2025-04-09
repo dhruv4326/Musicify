@@ -1,5 +1,6 @@
 import React from "react";
 import { Heart, Home } from "lucide-react";
+import { History } from "lucide-react";
 
 const Sidebar = ({ currentPage, setCurrentPage }) => {
   return (
@@ -26,6 +27,16 @@ const Sidebar = ({ currentPage, setCurrentPage }) => {
           <Heart className="w-5 h-5" />
           Favourites
         </button>
+
+        <button
+            onClick={() => setCurrentPage("RecentlyPlayed")}
+            className={`flex items-center gap-3  px-2 py-1 rounded hover:bg-white/10 ${
+              currentPage === "RecentlyPlayed" ? "text-green-400 font-semibold" : "text-white"
+            }`}
+          >
+            <History className="w-5 h-5" />
+            Recently Played
+          </button>
       </nav>
     </div>
   );

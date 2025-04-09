@@ -28,15 +28,16 @@ const SongCard = ({ song, onPlay, onFav, isFav, isPlaying }) => {
         </button>
 
         <button
-          onClick={onPlay}
-          className="bg-green-400 hover:bg-gray-200 text-black w-10 h-10 rounded-full flex items-center justify-center shadow-md"
-        >
-          {isPlaying ? (
-            <Pause className="w-5 h-5" />
-          ) : (
-            <Play className="w-5 h-5" />
-          )}
-        </button>
+  onClick={() => onPlay(song, true)} // pass song + toggle intent
+  className="bg-green-400 hover:bg-gray-200 text-black w-10 h-10 rounded-full flex items-center justify-center shadow-md"
+>
+  {isPlaying ? (
+    <Pause className="w-5 h-5" />
+  ) : (
+    <Play className="w-5 h-5" />
+  )}
+</button>
+
       </div>
     </div>
   );
