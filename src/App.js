@@ -160,7 +160,7 @@ function App() {
             />
           </div>
 
-          <main className="flex-1 px-4 overflow-y-auto">
+          <main className="flex-1 px-4 pb-28 overflow-y-auto">
             {currentPage === "Home" && (
               <Home
                 onPlaySong={handlePlaySong}
