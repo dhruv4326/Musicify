@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SongCard from "../components/SongCard";
 
-const Home = ({ onPlaySong, onFavSong, songs, favorites }) => {
+const Home = ({ onPlaySong, onFavSong, songs, favorites, currentSong, isPlaying }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -16,6 +16,7 @@ const Home = ({ onPlaySong, onFavSong, songs, favorites }) => {
       ) : (
         songs.map((song, index) => {
           const isFav = favorites.some((fav) => fav.title === song.title);
+          const isThisSongPlaying = currentSong?.title === song.title && isPlaying;
 
           return (
             <SongCard
@@ -28,8 +29,8 @@ const Home = ({ onPlaySong, onFavSong, songs, favorites }) => {
                 sessionStorage.setItem("recent", JSON.stringify(updated));
               }}
               onFav={() => onFavSong(song)}
-              isFav={isFav} // ✅ Tells SongCard to render red or white heart
-              isPlaying={false}
+              isFav={isFav}
+              isPlaying={isThisSongPlaying}
             />
           );
         })

@@ -33,7 +33,7 @@ const Favourites = ({ onPlaySong, onFavSong, favorites }) => {
             song={song}
             onPlay={() => onPlaySong(song)}
             onFav={() => onFavSong(song)}
-            isFav={true} // ✅ ADD THIS
+            isFav={true} 
           />
           
         ))

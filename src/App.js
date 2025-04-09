@@ -162,12 +162,15 @@ function App() {
 
           <main className="flex-1 px-4 pb-28 overflow-y-auto">
             {currentPage === "Home" && (
-              <Home
-                onPlaySong={handlePlaySong}
-                onFavSong={handleFavSong}
-                songs={filteredSongs}
-                favorites={favorites}
-              />
+             <Home
+             onPlaySong={handlePlaySong}
+             onFavSong={handleFavSong}
+             songs={filteredSongs}
+             favorites={favorites}
+             currentSong={currentSong}
+             isPlaying={isPlaying}
+           />
+           
             )}
             {currentPage === "Favourites" && (
               <Favourites
