@@ -54,32 +54,36 @@ function App() {
 
   const handlePlaySong = (song) => {
     const index = songs.findIndex((s) => s.title === song.title);
-    setCurrentIndex(index);
-    setCurrentSong(song);
-    setIsPlaying(true);
+    if (currentSong?.title === song.title) {
+      setIsPlaying((prev) => !prev); // toggle play/pause
+    } else {
+      setCurrentIndex(index);
+      setCurrentSong(song);
+      setIsPlaying(true);
 
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.src = song.thumbnail;
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = song.thumbnail;
 
-    img.onload = () => {
-      try {
-        const colorThief = new ColorThief();
-        const [r, g, b] = colorThief.getColor(img);
+      img.onload = () => {
+        try {
+          const colorThief = new ColorThief();
+          const [r, g, b] = colorThief.getColor(img);
 
-        const lighten = (x) => Math.min(Math.floor(x * 1.3), 255);
-        const base = `rgb(${r}, ${g}, ${b})`;
-        const lighter = `rgb(${lighten(r)}, ${lighten(g)}, ${lighten(b)})`;
+          const lighten = (x) => Math.min(Math.floor(x * 1.3), 255);
+          const base = `rgb(${r}, ${g}, ${b})`;
+          const lighter = `rgb(${lighten(r)}, ${lighten(g)}, ${lighten(b)})`;
 
-        setBgStyle({
-          backgroundImage: `linear-gradient(to bottom right, ${base}, ${lighter})`,
-        });
-      } catch (err) {
-        setBgStyle({
-          backgroundImage: "linear-gradient(to bottom right, #0f0f0f, #1e1e1e)",
-        });
-      }
-    };
+          setBgStyle({
+            backgroundImage: `linear-gradient(to bottom right, ${base}, ${lighter})`,
+          });
+        } catch (err) {
+          setBgStyle({
+            backgroundImage: "linear-gradient(to bottom right, #0f0f0f, #1e1e1e)",
+          });
+        }
+      };
+    }
   };
 
   const handlePause = () => setIsPlaying(false);
@@ -162,21 +166,22 @@ function App() {
 
           <main className="flex-1 px-4 pb-28 overflow-y-auto">
             {currentPage === "Home" && (
-             <Home
-             onPlaySong={handlePlaySong}
-             onFavSong={handleFavSong}
-             songs={filteredSongs}
-             favorites={favorites}
-             currentSong={currentSong}
-             isPlaying={isPlaying}
-           />
-           
+              <Home
+                onPlaySong={handlePlaySong}
+                onFavSong={handleFavSong}
+                songs={filteredSongs}
+                favorites={favorites}
+                currentSong={currentSong}
+                isPlaying={isPlaying}
+              />
             )}
             {currentPage === "Favourites" && (
               <Favourites
                 favorites={favorites}
                 onPlaySong={handlePlaySong}
                 onFavSong={handleFavSong}
+                currentSong={currentSong}
+                isPlaying={isPlaying}
               />
             )}
           </main>

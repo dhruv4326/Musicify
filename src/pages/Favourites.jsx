@@ -17,8 +17,7 @@ const assetMap = {
   },
 };
 
-const Favourites = ({ onPlaySong, onFavSong, favorites }) => {
-  // Fix assets on the fly
+const Favourites = ({ onPlaySong, onFavSong, favorites, currentSong, isPlaying }) => {
   const fixedFavs = favorites.map((song) => ({
     ...song,
     ...assetMap[song.title],
@@ -27,16 +26,20 @@ const Favourites = ({ onPlaySong, onFavSong, favorites }) => {
   return (
     <div className="p-6 flex flex-col gap-4">
       {fixedFavs.length > 0 ? (
-        fixedFavs.map((song, index) => (
+        fixedFavs.map((song, index) => {
+          const isThisSongPlaying = currentSong?.title === song.title && isPlaying;
+
+          return (
             <SongCard
-            key={index}
-            song={song}
-            onPlay={() => onPlaySong(song)}
-            onFav={() => onFavSong(song)}
-            isFav={true} 
-          />
-          
-        ))
+              key={index}
+              song={song}
+              onPlay={() => onPlaySong(song)}
+              onFav={() => onFavSong(song)}
+              isFav={true}
+              isPlaying={isThisSongPlaying}
+            />
+          );
+        })
       ) : (
         <p className="text-gray-300">No favourites added yet.</p>
       )}
