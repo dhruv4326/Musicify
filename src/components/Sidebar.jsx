@@ -5,7 +5,7 @@ import { History } from "lucide-react";
 const Sidebar = ({ currentPage, setCurrentPage }) => {
   return (
     <div className="h-full p-4 md:p-6 flex flex-col text-white space-y-6 md:space-y-8 text-sm md:text-base">
-      <h1 className="text-xl md:text-2xl font-bold mb-6 md:mb-8">🎵 Musicify</h1>
+      <h1 className="text-xl md:text-2xl font-bold mb-6 md:mb-8">🎵 Rhythmix</h1>
 
       <nav className="flex flex-col gap-3 md:gap-4">
         <button
